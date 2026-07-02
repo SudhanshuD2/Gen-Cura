@@ -13,12 +13,10 @@ import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @MappedSuperclass
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 public class BaseEntity {
 	@Id
@@ -33,15 +31,7 @@ public class BaseEntity {
 	@UpdateTimestamp
 	private LocalDateTime updatedAt;
 	
-	@Column(name="is_active", nullable = false)
+	@Column(name="is_active", nullable = false, columnDefinition = "boolean default true")
 	private boolean isActive = true;
 	
-	// --- relational
-	/*
-	@Column(name = "created_by", nullable = false, updatable = false)
-	private User createdBy;
-	
-	@Column(name = "updated_by", nullable = false)
-	private User updatedBy;
-	*/
 }
