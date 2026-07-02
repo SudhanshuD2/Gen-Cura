@@ -9,9 +9,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,7 +17,7 @@ import lombok.ToString;
 @Entity
 @Table(name = "users")
 @Getter
-@Setter
+@Setter	
 @ToString
 @NoArgsConstructor
 @AttributeOverride(name="id", column = @Column(name="user_id"))
@@ -30,11 +27,10 @@ public class User extends BaseEntity{
 	private String userName;
 	
 	@Column(nullable = false, unique = true)
-	@Email
 	private String email;
 	
 	@Column(nullable=false, length = 12)
-	private String phone;
+	private String mobile;
 	
 	@Column(nullable = false)
 	private String password;
@@ -42,5 +38,5 @@ public class User extends BaseEntity{
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private UserRole role;
-//	status
+	
 }
