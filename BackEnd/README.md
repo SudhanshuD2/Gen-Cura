@@ -128,15 +128,12 @@ Doctor specific information.
 | Column | Type |
 |---------|------|
 | patientCode | String |
-| firstName | String |
-| middleName | String |
-| lastName | String |
+| fullName | String |
 | dob | Date |
 | gender | Enum |
 | bloodGroup | Enum |
 | mobile | String |
 | email | String |
-| occupation | String |
 | address | String |
 | emergencyContactName | String |
 | emergencyContactNumber | String |
@@ -153,11 +150,10 @@ Doctor specific information.
 |---------|------|
 | patientId | FK |
 | doctorId | FK |
-| appointmentDate | LocalDate |
-| appointmentTime | LocalTime |
+| appointmentSchedule | LocalDate |
 | tokenNumber | Integer |
 | chiefComplaint | String |
-| status | Enum |
+| appointmentStatus | Enum |
 | bookedBy | FK(User) |
 | remarks | String |
 
@@ -336,6 +332,7 @@ INACTIVE
 MALE
 FEMALE
 OTHER
+NOT_SPECIFIED
 ```
 
 ---
