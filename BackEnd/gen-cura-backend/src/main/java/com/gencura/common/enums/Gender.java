@@ -1,5 +1,5 @@
 package com.gencura.common.enums;
 
 public enum Gender {
-	MALE, FEMALE, OTHER
+	NOT_SPECIFIED, MALE, FEMALE, OTHER
 }
