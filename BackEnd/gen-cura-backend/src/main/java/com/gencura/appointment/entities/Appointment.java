@@ -2,10 +2,12 @@ package com.gencura.appointment.entities;
 
 import java.time.LocalDateTime;
 
+import com.gencura.bill.entities.Bill;
 import com.gencura.common.entities.BaseEntity;
 import com.gencura.common.enums.AppointmentStatus;
 import com.gencura.doctor.entities.Doctor;
 import com.gencura.patient.entities.Patient;
+import com.gencura.prescription.entities.Prescription;
 import com.gencura.user.entities.User;
 
 import jakarta.persistence.AttributeOverride;
@@ -13,8 +15,10 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -58,4 +62,13 @@ public class Appointment extends BaseEntity{
 	@ManyToOne
 	@JoinColumn(name = "doctor_id", nullable = false)
 	private Doctor doctor;
+	
+	@OneToOne(mappedBy = "appointment", fetch = FetchType.LAZY)
+	private Prescription prescription;
+	
+	@OneToOne(mappedBy = "appointment", fetch = FetchType.LAZY)
+	private Consultation consultation;
+	
+	@OneToOne(mappedBy = "appointment", fetch = FetchType.LAZY)
+	private Bill bill;
 }
