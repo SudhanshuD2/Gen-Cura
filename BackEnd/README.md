@@ -79,6 +79,18 @@ Bill Item
       ▼
 Chargeable Service
 ```
+---
+
+# 0. BaseEntity
+
+Mapped supper class used by all the entities.
+
+| Column | Type | Description |
+|---------|------|-------------|
+| id | Long | Primary Key |
+| isActive | boolean | true, false |
+| createdAt | Timestamp | Audit |
+| updatedAt | Timestamp | Audit |
 
 ---
 
@@ -88,15 +100,11 @@ Stores all system users.
 
 | Column | Type | Description |
 |---------|------|-------------|
-| id | Long | Primary Key |
 | fullName | String | User Full Name |
 | email | String | Unique Email |
 | mobile | String | Mobile Number |
 | password | String | Encrypted Password |
 | role | Enum | ADMIN, RECEPTIONIST, DOCTOR, INTERN |
-| status | Enum | ACTIVE, INACTIVE |
-| createdAt | Timestamp | Audit |
-| updatedAt | Timestamp | Audit |
 
 ---
 
@@ -106,8 +114,6 @@ Doctor specific information.
 
 | Column | Type |
 |---------|------|
-| id | Long |
-| userId | FK(User) |
 | specialization | String |
 | qualification | String |
 | registrationNumber | String |
@@ -121,22 +127,17 @@ Doctor specific information.
 
 | Column | Type |
 |---------|------|
-| id | Long |
 | patientCode | String |
-| firstName | String |
-| middleName | String |
-| lastName | String |
+| fullName | String |
 | dob | Date |
 | gender | Enum |
 | bloodGroup | Enum |
 | mobile | String |
 | email | String |
-| occupation | String |
 | address | String |
 | emergencyContactName | String |
 | emergencyContactNumber | String |
 | allergies | Text |
-| status | Enum |
 
 ---
 
@@ -147,14 +148,12 @@ Doctor specific information.
 
 | Column | Type |
 |---------|------|
-| id | Long |
 | patientId | FK |
 | doctorId | FK |
-| appointmentDate | LocalDate |
-| appointmentTime | LocalTime |
+| appointmentSchedule | LocalDate |
 | tokenNumber | Integer |
 | chiefComplaint | String |
-| status | Enum |
+| appointmentStatus | Enum |
 | bookedBy | FK(User) |
 | remarks | String |
 
@@ -186,7 +185,6 @@ Medical consultation record.
 
 | Column | Type |
 |---------|------|
-| id | Long |
 | appointmentId | FK |
 | patientId | FK |
 | doctorId | FK |
@@ -207,7 +205,6 @@ Medical consultation record.
 
 | Column | Type |
 |---------|------|
-| id | Long |
 | consultationId | FK |
 | doctorId | FK |
 | patientId | FK |
@@ -219,7 +216,6 @@ Medical consultation record.
 
 | Column | Type |
 |---------|------|
-| id | Long |
 | prescriptionId | FK |
 | medicineName | String |
 | dosage | String |
@@ -235,7 +231,6 @@ Master list of services offered by clinic.
 
 | Column | Type |
 |---------|------|
-| id | Long |
 | serviceCode | String |
 | serviceName | String |
 | category | Enum |
@@ -262,7 +257,6 @@ One bill per appointment.
 
 | Column | Type |
 |---------|------|
-| id | Long |
 | appointmentId | FK |
 | patientId | FK |
 | totalAmount | Decimal |
@@ -289,7 +283,6 @@ PAID
 
 | Column | Type |
 |---------|------|
-| id | Long |
 | billId | FK |
 | chargeableServiceId | FK |
 | quantity | Integer |
@@ -305,11 +298,9 @@ Stores AI-generated consultation summary.
 
 | Column | Type |
 |---------|------|
-| id | Long |
 | consultationId | FK |
 | summary | Text |
 | modelVersion | String |
-| generatedAt | Timestamp |
 
 ---
 
@@ -341,6 +332,7 @@ INACTIVE
 MALE
 FEMALE
 OTHER
+NOT_SPECIFIED
 ```
 
 ---
