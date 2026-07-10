@@ -35,20 +35,46 @@ public class Bill extends BaseEntity{
 	@JoinColumn(name = "appointment_id")
 	private Appointment appointment;
 	
-	@Column(name = "total_amount")
+	@Column(name = "total_amount", nullable = false, precision = 10, scale = 2)
 	private BigDecimal totalAmount;
 	
-	private BigDecimal discount;
+	private BigDecimal discount = BigDecimal.ZERO;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "payment_mode")
 	private PaymentMode paymentMode;
 	
+	/*
+	 * while the bill status is draft 
+	 * all fields can be updated from services
+	 * if it becomes the final result will be saved and not provided
+	 * for further updates - 
+	 * only possible when user-role Accountant can manage if required any update
+	 * or done finalized by mistake.
+	 */
 	@Enumerated(EnumType.STRING)
 	@Column(name = "bill_status")
-	private BillStatus status = BillStatus.FINALIZED;
+	private BillStatus status = BillStatus.DRAFT;
 	
+	/*
+	 * JSONized list maintained instead of creating many entries
+	 * to new Bill item table it may be repeated or will not be updatable
+	 * if not provided proper access
+	 * hence this will be maintained with JSON list - easy to access
+	 */
 	@Column(columnDefinition = "json")
     @Convert(converter = BillItemListConverter.class)
     private List<BillItem> items = new ArrayList<>();
+	
+	/*
+	 * Custom Constructors are ** required **
+	 * [can we manage this with DTOs?]
+	 * for this bills table
+	 * total amount is calculated and saved for further references
+	 * if rateCardItems are updated in between then total amount 
+	 * if calculated dynamically will be auto updated and may have some
+	 * auditing issues. so saving it as new column is better choice.
+	 */
+	
+	
 }

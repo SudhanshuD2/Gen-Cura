@@ -39,15 +39,16 @@ public class Doctor {
 	@ToString.Exclude
 	private User user;
 	
-	@Column(length = 1000)
+	@Column(length = 100)
 	private String specialization;
 	
+	@Column(length = 150)
 	private String qualification;
 	
-	@Column(name = "registration_number")
+	@Column(name = "registration_number", unique=true, length=50)
 	private String registrationNumber;
 	
-	@Column(name = "consultation_fee", nullable = false)
+	@Column(name = "consultation_fee", nullable = false, precision = 10, scale = 2)
 	private BigDecimal consultationFee;
 	
 	@Column(name = "experience_years")

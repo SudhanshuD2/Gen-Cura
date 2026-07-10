@@ -15,8 +15,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -31,10 +31,10 @@ import lombok.ToString;
 @AttributeOverride(name = "id", column = @Column(name="patient_id"))
 public class Patient extends BaseEntity{
 	
-	@Column(name = "aadhaar_number", unique = true)
+	@Column(name = "aadhaar_number", unique = true, length=12)
 	private String aadhaarNumber;
 	
-	@Column(name = "full_name")
+	@Column(name = "full_name", length = 100)
 	private String fullName;
 	
 	
@@ -48,21 +48,28 @@ public class Patient extends BaseEntity{
 	@Column(name = "blood_group")
 	private BloodGroup bloodGroup;
 	
+	@Column(length = 15)
 	private String mobile;
-	
+
+	@Column(length = 150)
 	private String email;
-	
+
+	@Column(length = 500)
 	private String address;
 	
-	@Column(name = "emergency_person")
+	@Column(name = "emergency_person", length = 100)
 	private String emergencyContactName;
 	
-	@Column(name = "emergency_number")
+	@Column(name = "emergency_number", length = 15)
 	private String emergencyContactNumber;
 	
-	@Size(max = 1000)
+	@Column(length = 1000)
 	private String allergies;
 	
+	@OneToOne(mappedBy="patient")
+	private AISummary summary;
+	
 	@OneToMany(mappedBy = "patient")
+	@ToString.Exclude
 	private List<Appointment> appointments = new ArrayList<>();
 }

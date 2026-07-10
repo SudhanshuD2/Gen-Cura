@@ -23,16 +23,16 @@ import lombok.ToString;
 @AttributeOverride(name="id", column = @Column(name="user_id"))
 public class User extends BaseEntity{
 	
-	@Column(name = "user_name", nullable = false)
-	private String userName;
+	@Column(name = "full_name", nullable = false, length = 100)
+	private String fullName;
 	
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false, unique = true, length = 150)
 	private String email;
 	
-	@Column(nullable=false, length = 12)
+	@Column(nullable=false, length = 15)
 	private String mobile;
 	
-	@Column(nullable = false)
+	@Column(nullable = false, length = 100)
 	private String password;
 	
 	@Enumerated(EnumType.STRING)

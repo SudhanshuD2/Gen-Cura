@@ -32,14 +32,14 @@ import lombok.Setter;
 @AttributeOverride(name = "id", column = @Column(name="appointment_id"))
 public class Appointment extends BaseEntity{
 	
-	@Column(name = "appointment_schedule", nullable = false)
-	private LocalDateTime appointmentSchedule;
+	@Column(name = "scheduled_at", nullable = false)
+	private LocalDateTime scheduleAt;
 	
 	// GENERATED PER DAY. 
 	@Column(name="token_number",nullable = false)
 	private Integer tokenNumber;
 	
-	@Column(name = "chief_complaint", nullable = false)
+	@Column(name = "chief_complaint", nullable = false, length=300)
 	private String chiefComplaint;
 	
 	@Column(name = "appointment_status", nullable = false)

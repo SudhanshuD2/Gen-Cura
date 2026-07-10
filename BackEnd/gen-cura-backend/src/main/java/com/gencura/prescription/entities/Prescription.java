@@ -9,6 +9,7 @@ import com.gencura.common.utils.PrescriptionItemListConverter;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
@@ -23,6 +24,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class Prescription {
+	@Id
+	@Column(name = "appointment_id")
+	private Long id;
 	
 	@MapsId
 	@OneToOne

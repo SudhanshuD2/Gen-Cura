@@ -20,9 +20,10 @@ import lombok.Setter;
 @AttributeOverride(name = "id", column = @Column(name="rate_id"))
 public class RateCardEntry extends BaseEntity{
 	
-	@Column(name = "service_name", nullable = false)
+	@Column(name = "service_name", nullable = false, precision = 10, scale = 2)
 	private String serviceName;
 	
+	@Column(length = 500)
 	private String description;
 	
 	@Column(nullable = false)

@@ -31,7 +31,7 @@ public class BaseEntity {
 	@UpdateTimestamp
 	private LocalDateTime updatedAt;
 	
-	@Column(name="is_active", nullable = false, columnDefinition = "boolean default true")
-	private boolean isActive = true;
+	@Column(name="active", nullable = false)
+	private boolean active = true;
 	
 }

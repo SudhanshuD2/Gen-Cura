@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
@@ -20,15 +21,19 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Consultation {
 	
+	@Id
+	@Column(name = "appointment_id")
+	private Long id;
+	
 	@MapsId
 	@OneToOne
 	@JoinColumn(name="appointment_id", nullable = false)
 	private Appointment appointment;
 	
-	@Size(max=1000)
+	@Column(length = 1000)
 	private String diagnosis;
 	
-	@Size(max=500)
+	@Column(length = 1000)
 	private String advice;
 	
 	/*
@@ -38,8 +43,7 @@ public class Consultation {
 	 * AI models table will be shared with users with
 	 * OneToOne relations. 
 	 */
-	@Column(name = "clinical_notes")
-	@Size(max=500)
+	@Column(name = "clinical_notes", length = 1000)
 	private String clinicalNotes;
 	
 	@Column(name = "followup_date")
