@@ -2,8 +2,6 @@ package com.gencura.bill.entities;
 
 import java.math.BigDecimal;
 
-import com.gencura.catlog.entities.RateCardEntry;
-
 import lombok.Getter;
 import lombok.Setter;
 
