@@ -22,7 +22,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-@AttributeOverride(name="id", column = @Column(name="user_id"))
+@AttributeOverride(name="id", column = @Column(name="role_id"))
 public class UserRole extends BaseEntity{
 	
 	@Pattern(regexp = "^ROLE_[A-Z_]+$", message = "Input must contain only uppercase letters and underscores")

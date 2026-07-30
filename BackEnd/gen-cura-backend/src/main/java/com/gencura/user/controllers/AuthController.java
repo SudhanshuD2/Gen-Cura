@@ -19,6 +19,7 @@ import com.gencura.user.dtos.RegisterUserRequest;
 import com.gencura.user.dtos.UserResponse;
 import com.gencura.user.services.AuthService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 
 @RestController
@@ -57,6 +58,7 @@ public class AuthController {
 
     // Change Password
     @PutMapping("/change-password")
+    @SecurityRequirement(name="Bearer Authentication")
     public ResponseEntity<ApiResponse<Void>> changePassword(
             @Valid @RequestBody ChangePasswordRequest request) {
 
@@ -69,7 +71,7 @@ public class AuthController {
     // Forgot Password
     @GetMapping("/forgot-password")
     public ResponseEntity<ApiResponse<String>> forgotPassword(
-            @Valid @RequestBody String email) {
+            @Valid @RequestParam String email) {
 
         ApiResponse<String> response =
                 authService.forgotPassword(email);
@@ -78,7 +80,7 @@ public class AuthController {
     }
 
     // Reset Password
-    @PostMapping("/reset-password")
+    @PutMapping("/reset-password")
     public ResponseEntity<ApiResponse<Void>> resetPassword(
             @Valid @RequestBody String password, @Valid @RequestParam String email) {
 

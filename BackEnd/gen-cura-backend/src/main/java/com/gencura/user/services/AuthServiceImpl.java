@@ -1,8 +1,11 @@
 package com.gencura.user.services;
 
+import java.math.BigDecimal;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +14,8 @@ import com.gencura.common.exceptions.InvalidCredentialException;
 import com.gencura.common.exceptions.InvalidOperationException;
 import com.gencura.common.exceptions.ResourceNotFoundException;
 import com.gencura.common.utils.ApiResponse;
+import com.gencura.doctor.entities.Doctor;
+import com.gencura.doctor.repositories.DoctorRepository;
 import com.gencura.security.CustomUserDetails;
 import com.gencura.security.JwtService;
 import com.gencura.user.dtos.ChangePasswordRequest;
@@ -35,6 +40,7 @@ public class AuthServiceImpl implements AuthService {
 
 	private final UserRepository userRepo;
 	private final UserRoleRepository userRoleRepo;
+	private final DoctorRepository doctorRepo;
 	private final PasswordEncoder passEncoder;
 	private final AuthenticationManager authenticationManager;
 	private final JwtService jwtService;
@@ -45,37 +51,66 @@ public class AuthServiceImpl implements AuthService {
 		
 		if(userRepo.existsByEmail(req.getEmail()))
 			throw new DuplicateResourceException("Email ID already exists "+req.getEmail());
-			
+		
 		String roleName = normalizeRole(req.getRole());
 		
 		UserRole usrRole = userRoleRepo.findByRoleAndActiveTrue(roleName).orElseThrow(
 				()-> new InvalidCredentialException( "Role not found : " + roleName)
 			);
+		String currRole = SecurityContextHolder.getContext()
+		        .getAuthentication()
+		        .getAuthorities()
+		        .iterator()
+		        .next()
+		        .getAuthority();
+			
+//		if(!currRole.equals("ROLE_SUPER_ADMIN") && (roleName.equals("ROLE_HOSPITAL_ADMIN") || roleName.equals("ROLE_SUPER_ADMIN")))
+//			throw new InvalidOperationException("Cannot register higher authorities with users role : "+currRole);
 		
 		User usr = new User(
-				req.getFullName().trim(),
-				req.getEmail().trim(),
-				req.getMobile().trim(),
-				passEncoder.encode(req.getPassword()),
-				usrRole
-			);
+			req.getFullName().trim(),
+			req.getEmail().trim(),
+			req.getMobile().trim(),
+			passEncoder.encode(req.getPassword()),
+			usrRole
+		);
 		User saved = userRepo.save(usr);
+		
+		if(usrRole.getRole().equals("ROLE_DOCTOR")) {
+			Doctor doc = new Doctor();
+			doc.setConsultationFee(BigDecimal.ZERO);
+			doc.setExperienceYears(0);
+			doc.setQualification("NA");
+			doc.setSpecialization("NA");
+			doc.setRegistrationNumber(usr.getEmail());
+			doc.setUser(saved);
+			doc.setAvailable(true);
+			doctorRepo.save(doc);
+		}
 
-		return ApiResponse.create("Registration Successfull", toUserResponse(saved));
+		return ApiResponse.create("Registration Successful.", toUserResponse(saved));
 	}
 
 	@Override
 	public ApiResponse<LoginResponse> loginUser(LoginUserRequest req) {
+		String login;
+
+		if (req.getEmail() != null && !req.getEmail().isBlank()) {
+		    login = req.getEmail();
+		} else if (req.getMobile() != null && !req.getMobile().isBlank()) {
+		    login = req.getMobile();
+		} else {
+		    throw new InvalidOperationException("Email or mobile is required");
+		}
 		
 		Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        req.getEmail(),
-                        req.getPassword()
-                )
+            new UsernamePasswordAuthenticationToken(
+                login,
+                req.getPassword()
+            )
         );
 		
-		CustomUserDetails userDetails =
-                (CustomUserDetails) authentication.getPrincipal();
+		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 		
 		String token = jwtService.generateToken(
                 userDetails.getUserId(),
@@ -84,12 +119,12 @@ public class AuthServiceImpl implements AuthService {
         );
 		
 		LoginResponse response = new LoginResponse(
-				token,
-				userDetails.getEmail(),
-				userDetails.getUserId(), 
-				userDetails.getFullName(), 
-				userDetails.getRole()
-			);
+			token,
+			userDetails.getEmail(),
+			userDetails.getUserId(), 
+			userDetails.getFullName(), 
+			userDetails.getRole()
+		);
 
         return ApiResponse.success( "Login successful.", response);
 	}
