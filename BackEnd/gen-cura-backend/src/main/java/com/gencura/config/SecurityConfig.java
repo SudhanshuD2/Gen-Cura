@@ -24,6 +24,8 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     private final AuthenticationProvider authenticationProvider;
+    
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     private final JwtAuthenticationEntryPoint authenticationEntryPoint;
 
@@ -41,6 +43,7 @@ public class SecurityConfig {
 	
 	        .exceptionHandling(exception ->
 	                exception.authenticationEntryPoint(authenticationEntryPoint)
+	                .accessDeniedHandler(jwtAccessDeniedHandler)
 	        )
 	
 	        .authenticationProvider(authenticationProvider)
