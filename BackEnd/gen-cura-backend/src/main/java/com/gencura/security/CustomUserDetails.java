@@ -14,7 +14,9 @@ import lombok.Getter;
 @Getter
 public class CustomUserDetails implements UserDetails {
 
-    private final Long userId;
+	private static final long serialVersionUID = 1L;
+	
+	private final Long userId;
     private final String fullName;
     private final String email;
     private final String password;
@@ -32,7 +34,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + role));
+        return List.of(new SimpleGrantedAuthority(this.role));
     }
 
     @Override

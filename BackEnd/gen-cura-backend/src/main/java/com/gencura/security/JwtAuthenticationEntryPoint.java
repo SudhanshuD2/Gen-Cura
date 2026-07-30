@@ -14,10 +14,12 @@ import com.gencura.common.utils.ApiResponse;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 
 @Component
+@RequiredArgsConstructor
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
-
+	private final ObjectMapper mapper;
     @Override
     public void commence(HttpServletRequest request,
                          HttpServletResponse response,
@@ -28,7 +30,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-        ObjectMapper mapper = new ObjectMapper();
+//        ObjectMapper mapper = new ObjectMapper();
 
         mapper.writeValue(response.getOutputStream(), ApiResponse.error("Unauthorized Please log in Again", null));
 
