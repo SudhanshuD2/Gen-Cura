@@ -64,8 +64,8 @@ public class AuthServiceImpl implements AuthService {
 		        .next()
 		        .getAuthority();
 			
-//		if(!currRole.equals("ROLE_SUPER_ADMIN") && (roleName.equals("ROLE_HOSPITAL_ADMIN") || roleName.equals("ROLE_SUPER_ADMIN")))
-//			throw new InvalidOperationException("Cannot register higher authorities with users role : "+currRole);
+		if(!currRole.equals("ROLE_SUPER_ADMIN") && (roleName.equals("ROLE_HOSPITAL_ADMIN") || roleName.equals("ROLE_SUPER_ADMIN")))
+			throw new InvalidOperationException("Cannot register higher authorities with users role : "+currRole);
 		
 		User usr = new User(
 			req.getFullName().trim(),
@@ -76,7 +76,7 @@ public class AuthServiceImpl implements AuthService {
 		);
 		User saved = userRepo.save(usr);
 		
-		if(usrRole.getRole().equals("ROLE_DOCTOR")) {
+		if(usrRole.getRole().equals("ROLE_DOCTOR") || usrRole.getRole().equals("ROLE_ASSISTANT_DOCTOR")) {
 			Doctor doc = new Doctor();
 			doc.setConsultationFee(BigDecimal.ZERO);
 			doc.setExperienceYears(0);

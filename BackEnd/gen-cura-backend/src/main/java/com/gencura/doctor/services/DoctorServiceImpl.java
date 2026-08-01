@@ -67,7 +67,7 @@ public class DoctorServiceImpl implements DoctorService {
 			
 			doctor.setRegistrationNumber(req.getRegistrationNumber().trim());
 		}
-		return ApiResponse.success("Details Updated.", toDoctorResponse(doc));
+		return ApiResponse.success("Details Updated.", toDoctorResponse(doctor));
 	}
 
 	@Override
